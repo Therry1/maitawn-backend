@@ -1,15 +1,8 @@
 import logging
-import os
-import asyncio
-from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.exception_handlers import http_exception_handler, validation_exception_handler
 from fastapi.exceptions import RequestValidationError
-from contextlib import asynccontextmanager
-from sqlalchemy import select
-from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from fastapi import FastAPI
-from app.config.database import Database
 
 '''
  import relatif à la cache
