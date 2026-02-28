@@ -32,6 +32,7 @@ def create_handlers_file(service_path: Path, service_name: str):
     
     content = f'''"""
 Handlers pour le service {to_title(service_name)}
+
 Contient la logique métier du service
 """
 
