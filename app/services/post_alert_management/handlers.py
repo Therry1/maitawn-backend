@@ -87,7 +87,7 @@ async def make_post_alert (db , payload , attachment):
     post_longitude = payload['longitude']
     post_latitude = payload['latitude']
     
-    print (f"aaaaaaaaaa: {str(institutions[0].to_dict()['location'])}")
+    #print (f"aaaaaaaaaa: {str(institutions[0].to_dict()['location'])}")
     ref_longitude = (institutions[0].to_dict())['location']['longitude']
     ref_latitude = (institutions[0].to_dict())['location']['latitude']
     # prise de la premiere institution comme reférence
