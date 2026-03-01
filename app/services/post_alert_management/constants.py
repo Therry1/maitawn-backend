@@ -9,3 +9,8 @@ class ValidationState(int , Enum):
     pending = 0
     rejected = -1
     archived = 2
+
+class PostAlertCat (str , Enum):
+    trash = 1
+    light = 2
+    birth = 3

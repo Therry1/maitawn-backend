@@ -7,14 +7,15 @@ from datetime import datetime
 import math
 from typing import List, Optional
 from uuid import UUID, uuid4
+from fastapi.responses import JSONResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from fastapi import HTTPException, status
 
 from google.cloud.firestore_v1.base_query import FieldFilter
 from app.common.upload_file import save_uploaded_file
-from app.services.post_alert_management.constants import ValidationState
-from app.services.post_alert_management.schemas import PostAlertResponse, PostAlertSchemaStore
+from app.services.post_alert_management.constants import PostAlertCat, ValidationState
+from app.services.post_alert_management.schemas import PostAlertCategoryBase, PostAlertResponse, PostAlertSchemaStore
 
 # fonction de haversine pour calculer la distnce entre deux point A et B
 async def haversine_distance(lat1, lon1, lat2, lon2):
@@ -34,10 +35,52 @@ async def haversine_distance(lat1, lon1, lat2, lon2):
 
     return R * c  # distance en km
 
-# fonction permettant de faire l'upload des fichiers
-async def upload_files ():
+# fonction pour creer st
+async def create_alert_categories(db):
     
-    return 'ok'
+    data_categories = [
+        PostAlertCategoryBase(label= 'trash' , code='TRASH', type= PostAlertCat.trash ,institution_category_ids = ["0229cb29-e91b-4d9c-b8e3-6307ac077579"] ),
+        PostAlertCategoryBase(label= 'light' , code='LIGHT', type= PostAlertCat.light ,institution_category_ids = ["0229cb29-e91b-4d9c-b8e3-6307ac077579"] ),
+        PostAlertCategoryBase(label= 'birth' , code='BIRTH', type= PostAlertCat.birth ,institution_category_ids = ["0229cb29-e91b-4d9c-b8e3-6307ac077579"] )
+    ]
+    data = []
+    for alert_category in data_categories:
+        await asyncio.to_thread(
+            db.collection("post_alert_categories")
+            .document(str(alert_category.id))
+            .set,
+            alert_category.model_dump(mode = 'json')  # pydantic v2
+        )
+        data = data + [alert_category]
+    
+    return JSONResponse(
+        status_code= status.HTTP_201_CREATED,
+        content={
+            'message' : 'les catégories d\'alerts ont été créé avec success',
+            'data' : str(data)
+        }
+    )
+
+# fonction permettant de lister les categorie d'alerte
+async def list_alert_categories(db):
+
+    docs = await asyncio.to_thread(
+        lambda: list(
+            db.collection("institution_categories").stream()
+        )
+    )
+
+    result = []
+
+    for doc in docs:
+        data = doc.to_dict()
+
+        # On s'assure que l'id correspond à l'id du document
+        data["id"] = doc.id
+
+        result.append(data)
+
+    return result
 
 # fonction permettant de faire une alert
 async def make_post_alert (db , payload , attachment):

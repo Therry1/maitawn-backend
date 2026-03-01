@@ -12,10 +12,15 @@ from app.services.post_alert_management.constants import ValidationState
 from firebase import get_firebase_db
 from app.services.post_alert_management.schemas import (
     PostAlertBase,
+    PostAlertCategoryBase,
+    PostAlertCategoryResponse,
     PostAlertForm,
     PostAlertResponse
 )
 from app.services.post_alert_management.handlers import (
+    create_alert_categories,
+    create_post_categories,
+    list_alert_categories,
     list_post_by_institution_id,
     make_post_alert
 )
@@ -30,6 +35,25 @@ router = APIRouter(
 
 from fastapi import Form, UploadFile, File
 from uuid import UUID
+
+@router.post(
+    "/post-category",
+    status_code=status.HTTP_201_CREATED,
+    summary="Créer un categorie d'alert"
+)
+async def create():
+    """
+    Créer une nouvelle categorie d'alert
+    """
+    return await create_alert_categories(db)
+
+@router.get(
+    "/post-category",
+    response_model=List[PostAlertCategoryResponse],
+    status_code=status.HTTP_200_OK
+)
+async def get_alert_categories():
+    return await list_alert_categories(db)
 
 @router.post(
     '/make-post-alert',

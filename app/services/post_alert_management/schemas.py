@@ -4,7 +4,7 @@ Schémas Pydantic pour le service Post Alert Management
 
 from datetime import datetime
 from typing import Annotated, List, Optional
-from uuid import UUID
+from uuid import UUID, uuid4
 from fastapi import File, Form, UploadFile
 from pydantic import BaseModel, ConfigDict, Field
 from google.cloud.firestore_v1 import GeoPoint
@@ -48,6 +48,22 @@ class PostAlertBase(BaseModel):
     #         attachment=attachment
     #     )
 
+class PostAlertCategoryBase(BaseModel):
+    id: UUID = Field(default_factory=uuid4)
+    label: str
+    code: str
+    type: int
+    institution_category_ids = List[UUID]
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+    updated_at: Optional[datetime] = None
+
+class PostAlertCategoryResponse(BaseModel):
+    id: UUID
+    label: str
+    code: str
+    type: int
+    created_at: datetime
+    updated_at: Optional[datetime] = None
 class PostAlertForm:
     def __init__(
         self,

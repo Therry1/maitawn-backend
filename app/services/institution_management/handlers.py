@@ -196,15 +196,14 @@ async def create_institution_management(
             .set(institution_dict)
         )
         
-        #institution = institution.to_dict()
         
-        # création du compte et stockage des informations de connexion
-        
+
+        # 3. Créer le compte
         new_account = {
-            "access_login": str(uuid4()),
-            "password": hash_password(str(uuid4())),
-            "autor_name": str(uuid4()),
-            "email": str(uuid4()),
+            "access_login": first_account_data.access_login,
+            "password": hash_password(first_account_data.password),
+            "autor_name": first_account_data.autor_name,
+            "email": first_account_data.email,
             "institution_id": institution_dict["id"],
             "created_at": datetime.utcnow().isoformat()
         }
