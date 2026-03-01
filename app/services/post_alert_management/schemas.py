@@ -53,7 +53,7 @@ class PostAlertCategoryBase(BaseModel):
     label: str
     code: str
     type: int
-    institution_category_ids = List[UUID]
+    institution_category_ids : List[UUID]
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: Optional[datetime] = None
 
