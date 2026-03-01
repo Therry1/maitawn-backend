@@ -3,6 +3,7 @@ Handlers pour le service Institution Management
 Contient la logique métier du service
 """
 import asyncio
+from datetime import datetime
 from typing import List, Optional
 from uuid import UUID, uuid4
 from fastapi.responses import JSONResponse
@@ -10,8 +11,12 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from fastapi import HTTPException, status
 
+from app.services.authentification_management.dependencies import create_access_token, create_refresh_token
+from app.services.authentification_management.handlers import hash_password
+from app.services.authentification_management.schemas import TokenResponse
 from app.services.institution_management.constants import IntitutionCat , ADAMAOUA_DATA
 from app.services.institution_management.schemas import (
+    InstitutionAccountRequest,
     InstitutionCategoryBase,
     InstitutionCreate,
     InstitutionResponse,
@@ -168,6 +173,7 @@ async def list_institution_categories(db):
 
 async def create_institution_management(
     payload: InstitutionCreate,
+    first_account_data: InstitutionAccountRequest,
     db
 ):
     try:
@@ -189,11 +195,53 @@ async def create_institution_management(
             .document(institution_dict["id"])
             .set(institution_dict)
         )
+        
+        # création du compte et stockage des informations de connexion
+        # 1. Vérifier que l'institution existe
+        institution_doc = db.collection("institutions").document(str(payload.institution_id)).get()
+        if not institution_doc.exists:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Institution introuvable"
+            )
 
-        return {
-            "message": "Institution créée avec succès",
-            "data": institution_dict
+        # 2. Vérifier que le login n'est pas déjà pris
+        existing = db.collection("institution_accounts") \
+            .where("access_login", "==", payload.access_login) \
+            .limit(1).get()
+
+        if existing:
+            raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT,
+                detail="Ce login est déjà utilisé"
+            )
+
+        # 3. Créer le compte
+        new_account = {
+            "access_login": first_account_data.access_login,
+            "password": hash_password(first_account_data.password),
+            "autor_name": first_account_data.autor_name,
+            "email": first_account_data.email,
+            "institution_id": str(first_account_data.institution_id),
+            "created_at": datetime.utcnow().isoformat()
         }
+        
+        account_id = str(uuid4())
+        _, doc_ref = await asyncio.to_thread(
+            lambda: db.collection("institution_accounts")
+            .document(account_id)
+            .set(new_account)
+        ) 
+
+        # 4. Retourner les tokens comme pour le login
+        access_token = create_access_token(doc_ref.id)
+        refresh_token = create_refresh_token(doc_ref.id)
+
+        return TokenResponse(
+            message = "Institution créé avec succès",
+            access_token=access_token,
+            refresh_token=refresh_token
+        )
 
     except Exception as e:
         raise HTTPException(

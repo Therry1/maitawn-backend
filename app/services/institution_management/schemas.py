@@ -70,7 +70,13 @@ class InstitutionCreate(InstitutionBase):
     updated_at: Optional[datetime] = None
     deleted_at: Optional[datetime] = None
     
-
+class InstitutionAccountRequest(BaseModel):
+    access_login : str
+    password : str
+    email : str
+    autor_name: str = "Inonnu"
+    institution_id: UUID
+    
 
 class InstitutionUpdate(BaseModel):
     """Schéma pour la mise à jour d'un institution_management"""

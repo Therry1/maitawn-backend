@@ -8,6 +8,7 @@ from fastapi import APIRouter, Depends, status, Query
 from app.services.institution_management.schemas import (
     ArrondissementResponse,
     DepartmentResponse,
+    InstitutionAccountRequest,
     InstitutionCategoryResponse,
     InstitutionCreate,
     InstitutionResponse,
@@ -18,8 +19,6 @@ from app.services.institution_management.handlers import (
     create_institution_categories,
     create_institution_management,
     get_institution_by_id,
-    get_institution_management_by_id,
-    get_all_institution_management,
     init_locations,
     list_arrondissements,
     list_departments,
@@ -83,12 +82,13 @@ async def get_institution_categories():
     summary         ="Créer une institution"
 )
 async def create(
-    data: InstitutionCreate
+    institution_data: InstitutionCreate,
+    first_account_data : InstitutionAccountRequest
 ):
     """
     Créer une nouveau nouvelle institution
     """
-    return await create_institution_management(data, db)
+    return await create_institution_management(institution_data,first_account_data, db)
 
 @router.get(
     "/institutions",
