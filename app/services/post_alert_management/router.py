@@ -20,7 +20,7 @@ from app.services.post_alert_management.handlers import (
     make_post_alert
 )
 
-db = get_firebase_db
+db = get_firebase_db()
 
 router = APIRouter(
     prefix="/post-alert-management",
