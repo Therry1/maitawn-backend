@@ -16,7 +16,7 @@ router = APIRouter(
     tags=["Common roads"]
 )
 
-@router.pot(
+@router.post(
     '/testNotif'
 )
 async def test_notification_class():
