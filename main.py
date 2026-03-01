@@ -6,10 +6,6 @@ from fastapi.responses import JSONResponse
 from app.services.post_alert_management import router as post_alert_management_router
 from app.services.institution_management import router as institution_management_router
 
-import os
-import sys
-import traceback
-
 logger = logging.getLogger(__name__)
 app = FastAPI()
 
