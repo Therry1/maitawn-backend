@@ -12,14 +12,12 @@ from app.services.post_alert_management.constants import ValidationState
 from firebase import get_firebase_db
 from app.services.post_alert_management.schemas import (
     PostAlertBase,
-    PostAlertCategoryBase,
     PostAlertCategoryResponse,
     PostAlertForm,
     PostAlertResponse
 )
 from app.services.post_alert_management.handlers import (
     create_alert_categories,
-    create_post_categories,
     list_alert_categories,
     list_post_by_institution_id,
     make_post_alert

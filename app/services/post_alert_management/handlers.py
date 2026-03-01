@@ -66,7 +66,7 @@ async def list_alert_categories(db):
 
     docs = await asyncio.to_thread(
         lambda: list(
-            db.collection("institution_categories").stream()
+            db.collection("post_alert_categories").stream()
         )
     )
 
