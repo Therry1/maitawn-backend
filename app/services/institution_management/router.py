@@ -27,8 +27,7 @@ from app.services.institution_management.handlers import (
     list_institutions,
     list_regions
 )
-from firebase import get_firebase_db
-db = get_firebase_db
+
 router = APIRouter(
     prefix="/institution_management",
     tags=["Institution Management"]
