@@ -1,35 +1,34 @@
 import os
 from uuid import uuid4, UUID
 from fastapi import UploadFile, HTTPException
-import firebase_admin
-from firebase_admin import storage
+import cloudinary
+import cloudinary.uploader
+
+cloudinary.config(
+    cloud_name=os.environ.get("CLOUDINARY_CLOUD_NAME"),
+    api_key=os.environ.get("CLOUDINARY_API_KEY"),
+    api_secret=os.environ.get("CLOUDINARY_API_SECRET")
+)
 
 ALLOWED_EXTENSIONS = {".jpg", ".jpeg", ".png", ".pdf"}
 
 async def save_uploaded_file(file: UploadFile, institution_id: UUID):
-    # 1. Vérifier extension
-    filename = file.filename
-    _, extension = os.path.splitext(filename)
+    _, extension = os.path.splitext(file.filename)
     extension = extension.lower()
 
     if extension not in ALLOWED_EXTENSIONS:
         raise HTTPException(status_code=400, detail="Extension non autorisée")
 
-    # 2. Renommer le fichier
-    new_filename = f"{uuid4()}{extension}"
-
-    # 3. Chemin dans Firebase Storage
-    destination = f"uploads/{institution_id}/{new_filename}"
-
-    # 4. Upload vers Firebase Storage
-    bucket = storage.bucket()
-    blob = bucket.blob(destination)
-
     content = await file.read()
-    blob.upload_from_string(content, content_type=file.content_type)
+    
+    result = cloudinary.uploader.upload(
+        content,
+        folder=f"uploads/{institution_id}",
+        public_id=str(uuid4()),
+        resource_type="auto"
+    )
 
-    # 5. Rendre le fichier public et récupérer l'URL
-    blob.make_public()
-    file_url = blob.public_url
+    file_url = result["secure_url"]
+    new_filename = result["public_id"].split("/")[-1]
 
     return new_filename, file_url
