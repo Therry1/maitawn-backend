@@ -1,13 +1,13 @@
 from enum import IntEnum
 
-class DeviceType(int, IntEnum):
+class DeviceType(IntEnum):
     """Device platform types for OneSignal"""
     IOS = 0
     ANDROID = 1
     AMAZON = 2
     WINDOWS_PHONE = 3
 
-class NotificationType(int, IntEnum):
+class NotificationType(IntEnum):
     """Notification subscription status"""
     SUBSCRIBED = 1
     UNSUBSCRIBED = -2
