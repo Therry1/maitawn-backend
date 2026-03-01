@@ -196,33 +196,16 @@ async def create_institution_management(
             .set(institution_dict)
         )
         
+        #institution = institution.to_dict()
+        
         # création du compte et stockage des informations de connexion
-        # 1. Vérifier que l'institution existe
-        institution_doc = db.collection("institutions").document(str(payload.institution_id)).get()
-        if not institution_doc.exists:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail="Institution introuvable"
-            )
-
-        # 2. Vérifier que le login n'est pas déjà pris
-        existing = db.collection("institution_accounts") \
-            .where("access_login", "==", payload.access_login) \
-            .limit(1).get()
-
-        if existing:
-            raise HTTPException(
-                status_code=status.HTTP_409_CONFLICT,
-                detail="Ce login est déjà utilisé"
-            )
-
-        # 3. Créer le compte
+        
         new_account = {
-            "access_login": first_account_data.access_login,
-            "password": hash_password(first_account_data.password),
-            "autor_name": first_account_data.autor_name,
-            "email": first_account_data.email,
-            "institution_id": str(first_account_data.institution_id),
+            "access_login": str(uuid4()),
+            "password": hash_password(str(uuid4())),
+            "autor_name": str(uuid4()),
+            "email": str(uuid4()),
+            "institution_id": institution_dict["id"],
             "created_at": datetime.utcnow().isoformat()
         }
         
