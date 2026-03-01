@@ -31,3 +31,6 @@ async def custom_http_exception_handler(request: Request, exc: HTTPException):
 async def form_validation_exception_handler(request: Request, exc: RequestValidationError):
     return await validation_exception_handler(request, exc)
 
+
+from mangum import Mangum
+handler = Mangum(app)
