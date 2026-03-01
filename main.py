@@ -1,7 +1,7 @@
 import logging
 from fastapi import FastAPI, HTTPException, Request
-from fastapi.exception_handlers import http_exception_handler, validation_exception_handler
-from fastapi.exceptions import RequestValidationError
+from fastapi.exceptions import RequestValidationError  # ✅ CORRECT
+from starlette.exceptions import HTTPException as StarletteHTTPException 
 from fastapi import FastAPI
 
 
