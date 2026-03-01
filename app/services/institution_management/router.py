@@ -34,6 +34,10 @@ router = APIRouter(
     tags=["Institution Management"]
 )
 
+@router.get("/region")
+async def regions():
+    return {"regions": ["test1", "test2"]}
+
 @router.post("/init-locations")
 async def init_locations_path():
     return await init_locations(db)
