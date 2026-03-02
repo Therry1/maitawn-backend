@@ -19,7 +19,7 @@ from app.services.post_alert_management.schemas import (
 from app.services.post_alert_management.handlers import (
     create_alert_categories,
     list_alert_categories,
-    list_post_by_institution_id,
+    list_post,
     make_post_alert
 )
 
@@ -70,14 +70,14 @@ async def make_post_alert_path(
     return await make_post_alert(db, payload, form_data.attachment)
 
 @router.get(
-    '/list-post-by-institution-id',
+    '/list-post',
     response_model=List[PostAlertResponse],
     status_code=status.HTTP_200_OK,
-    summary= "route servant à lister les post d'alert en fonction de l'istitution"
+    summary= "route servant à lister les post d'alert"
 )
-async def list_post_by_institution_id_path(
+async def list_post_path(
     institution_id: UUID = Query(None),
     category_id : UUID = Query(None),
     state: ValidationState = Query(None)
 ):
-    return await list_post_by_institution_id(db , institution_id , category_id , state)
+    return await list_post(db , institution_id , category_id , state)

@@ -189,7 +189,7 @@ async def make_post_alert (db , payload , attachment):
     #     )
 
 # fonction permettant de lister les post d'alert en fontion de 'id de l'institution
-async def list_post_by_institution_id(
+async def list_post(
     db,
     institution_id: UUID = None,
     category_id: UUID = None,
