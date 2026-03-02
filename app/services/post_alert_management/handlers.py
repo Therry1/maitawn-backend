@@ -35,7 +35,7 @@ async def haversine_distance(lat1, lon1, lat2, lon2):
 
     return R * c  # distance en km
 
-# fonction pour creer st
+# fonction pour creer une categorie d'alerte
 async def create_alert_categories(db):
     
     data_categories = [
@@ -164,6 +164,7 @@ async def make_post_alert (db , payload , attachment):
     post_data = PostAlertSchemaStore(
         id = str(post_alert_id),
         post_category_id = str(payload['post_category_id']),
+        description = payload.get('description'),
         institution_ids = institution_ids,
         location = {
             'longitude' : post_longitude,
