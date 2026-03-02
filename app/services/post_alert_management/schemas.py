@@ -69,10 +69,10 @@ class PostAlertForm:
     def __init__(
         self,
         post_category_id: Annotated[UUID, Form(...)],
-        description: Annotated[str, Form(None)],
         latitude: Annotated[float, Form(...)],
         longitude: Annotated[float, Form(...)],
-        attachment: Annotated[UploadFile, File(...)]
+        attachment: Annotated[UploadFile, File(...)],
+        description: Annotated[Optional[str], Form()] = None
     ):
         self.post_category_id = post_category_id
         self.description = description
