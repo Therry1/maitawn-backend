@@ -102,6 +102,7 @@ class PostAlertSchemaStore(BaseModel):
     state : ValidationState
 
 class PostAlertResponse(BaseModel):
+    id: str
     post_category_id: str
     institution_id : List[str]
     latitude: float 
