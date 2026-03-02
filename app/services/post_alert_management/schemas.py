@@ -22,6 +22,7 @@ class LocationModel(BaseModel):
 
 class PostAlertBase(BaseModel):
     post_category_id: UUID
+    description     : Optional[str] = None
     latitude: float 
     longitude: float 
     
@@ -68,11 +69,13 @@ class PostAlertForm:
     def __init__(
         self,
         post_category_id: Annotated[UUID, Form(...)],
+        description: Annotated[str, Form(None)],
         latitude: Annotated[float, Form(...)],
         longitude: Annotated[float, Form(...)],
         attachment: Annotated[UploadFile, File(...)]
     ):
         self.post_category_id = post_category_id
+        self.description = description
         self.latitude = latitude
         self.longitude = longitude
         self.attachment = attachment
@@ -80,6 +83,7 @@ class PostAlertForm:
     def to_schema(self) -> PostAlertBase:
         return PostAlertBase(
             post_category_id=self.post_category_id,
+            description=self.description,
             location=LocationModel(
                 latitude=self.latitude,
                 longitude=self.longitude
@@ -87,7 +91,9 @@ class PostAlertForm:
         )
         
 class PostAlertSchemaStore(BaseModel):
+    id = str
     post_category_id: str
+    description: Optional[str] = None
     institution_ids : List[str]
     location: LocationModel
     file_name: str
