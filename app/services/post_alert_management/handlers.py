@@ -169,7 +169,7 @@ async def make_post_alert (db , payload , attachment):
         location = {
             'longitude' : post_longitude,
             'latitude' : post_latitude,
-        },
+        },            
         file_name = filename,
         file_url = file_path,
         state = ValidationState.pending,
@@ -232,7 +232,7 @@ async def list_post(
             location = item.get('location', {})
 
             post_list.append(PostAlertResponse(
-                id=item.get('id'),
+                id=item.id,
                 post_category_id=item.get('post_category_id'),
                 institution_id=item.get('institution_ids'),
                 latitude=location.get('latitude'),
