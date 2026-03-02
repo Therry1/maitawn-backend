@@ -104,6 +104,7 @@ class PostAlertSchemaStore(BaseModel):
 class PostAlertResponse(BaseModel):
     id: Optional[str] = None
     post_category_id: str
+    description: Optional[str] = None
     institution_id : List[str]
     latitude: float 
     longitude: float
