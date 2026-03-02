@@ -114,7 +114,7 @@ async def make_post_alert (db , payload , attachment):
                 filter=FieldFilter(
                     "category_id",
                     "==",
-                    str(payload["post_category_id"])
+                    "0229cb29-e91b-4d9c-b8e3-6307ac077579"
                 )
             ).stream()
         )
