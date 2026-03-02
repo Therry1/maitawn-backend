@@ -102,7 +102,7 @@ class PostAlertSchemaStore(BaseModel):
     state : ValidationState
 
 class PostAlertResponse(BaseModel):
-    id: str
+    id: Optional[str] = None
     post_category_id: str
     institution_id : List[str]
     latitude: float 

@@ -232,7 +232,7 @@ async def list_post(
             location = item.get('location', {})
 
             post_list.append(PostAlertResponse(
-                id=item.id,
+                id=doc.id,
                 post_category_id=item.get('post_category_id'),
                 institution_id=item.get('institution_ids'),
                 latitude=location.get('latitude'),
