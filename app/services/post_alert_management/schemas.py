@@ -91,7 +91,7 @@ class PostAlertForm:
         )
         
 class PostAlertSchemaStore(BaseModel):
-    id = str
+    id : str
     post_category_id: str
     description: Optional[str] = None
     institution_ids : List[str]

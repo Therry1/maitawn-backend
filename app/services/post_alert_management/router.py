@@ -63,6 +63,7 @@ async def make_post_alert_path(
 ):
     dict_data = {
         "post_category_id"  : form_data.post_category_id,
+        "description"       : form_data.description,
         "latitude"          : form_data.latitude,
         "longitude"         : form_data.longitude,
     }
