@@ -70,13 +70,6 @@ class InstitutionCreate(InstitutionBase):
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: Optional[datetime] = None
     deleted_at: Optional[datetime] = None
-    
-class InstitutionAccountRequest(BaseModel):
-    access_login : str
-    password : str
-    email : str
-    name: str = "Inonnu"
-    
 
 class InstitutionUpdate(BaseModel):
     """Schéma pour la mise à jour d'un institution_management"""
