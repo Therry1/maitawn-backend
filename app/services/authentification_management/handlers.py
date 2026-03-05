@@ -30,11 +30,11 @@ async def register (db , first_account_data:UserCreateRequest):
         }
         
         account_id = str(uuid4())
-        _, doc_ref = await asyncio.to_thread(
-            lambda: db.collection("users")
-            .document(account_id)
-            .set(new_account)
-        ) 
+        doc_ref = db.collection("users").document(account_id)
+
+        await asyncio.to_thread(
+            lambda: doc_ref.set(new_account)
+        )
 
         # 4. Retourner les tokens comme pour le login
         access_token = create_access_token(doc_ref.id)
