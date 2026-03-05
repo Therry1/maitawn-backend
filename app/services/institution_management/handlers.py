@@ -183,7 +183,7 @@ async def create_institution_management(
             .get()
         )
         
-        if doc.empty():
+        if not doc.exists:
             raise HTTPException(
                 status_code=500,
                 detail=f"l'utilisateur connecté avec l'id {user_connected_id} n'a pa de compte"
