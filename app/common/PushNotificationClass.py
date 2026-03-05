@@ -5,6 +5,7 @@ import httpx
 
 from app.common.common_constant import POST_METHOD
 from app.common.common_schema import OneSignalUser
+from app.services.email_service import send_email
 ONESIGNAL_APP_ID= os.environ.get('ONESIGNAL_APP_ID')
 ONESIGNAL_REST_KEY= os.environ.get('ONESIGNAL_REST_KEY')
 ONESIGNAL_BASE_URL = os.environ.get('ONESIGNAL_BASE_URL')
@@ -69,3 +70,18 @@ class PushNotificationClass():
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 detail= f"error push Notification: Exception: {str(exception)}"
             )
+            
+
+async def send_notification(recipient_email: str):
+    try:
+        await send_email(
+            recipients=[recipient_email],
+            subject="Nouvelle alerte",
+            body="<h1>Bonjour</h1><p>Vous avez une nouvelle alerte.</p>"
+        )
+        print("message:Email envoyé avec succès")
+    except Exception as e:
+        raise HTTPException(
+            status_code = status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=str(e)
+        )

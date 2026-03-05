@@ -13,6 +13,7 @@ from sqlalchemy import select
 from fastapi import HTTPException, status
 
 from google.cloud.firestore_v1.base_query import FieldFilter
+from app.common.PushNotificationClass import send_notification
 from app.common.upload_file import save_uploaded_file
 from app.services.post_alert_management.constants import PostAlertCat, ValidationState
 from app.services.post_alert_management.schemas import PostAlertCategoryBase, PostAlertResponse, PostAlertSchemaStore
@@ -181,6 +182,10 @@ async def make_post_alert (db , payload , attachment):
             post_data.model_dump()
         )
     )
+    
+    # envois de la notification
+    if min_location['email']:
+        await send_notification(min_location['email'])
         
     return payload
     # except Exception as exception:
