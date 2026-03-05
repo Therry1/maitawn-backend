@@ -113,9 +113,7 @@ async def make_post_alert (db , payload , attachment):
         lambda: list(
             db.collection('institutions').where(
                 filter=FieldFilter(
-                    "category_id",
-                    "==",
-                    "0229cb29-e91b-4d9c-b8e3-6307ac077579"
+                    "category_id", "==", payload["post_category_id"]
                 )
             ).stream()
         )
@@ -184,8 +182,8 @@ async def make_post_alert (db , payload , attachment):
     )
     
     # envois de la notification
-    if min_location['email']:
-        await send_notification(min_location['email'])
+    if min_location.get("email"):
+        await send_notification(min_location.get("email"))
         
     return payload
     # except Exception as exception:
