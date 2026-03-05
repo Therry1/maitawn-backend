@@ -16,7 +16,6 @@ from app.services.authentification_management.handlers import hash_password
 from app.services.authentification_management.schemas import TokenResponse
 from app.services.institution_management.constants import IntitutionCat , ADAMAOUA_DATA
 from app.services.institution_management.schemas import (
-    InstitutionAccountRequest,
     InstitutionCategoryBase,
     InstitutionCreate,
     InstitutionResponse,

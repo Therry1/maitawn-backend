@@ -48,7 +48,7 @@ async def register (db , first_account_data:UserCreateRequest):
     except Exception as exception:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail=f"Email ou mot de passe incorrect {str(exception)}"
+            detail=f"UnAutorize {str(exception)}"
         )
 
 async def login(db, payload: LoginRequest) -> TokenResponse:
