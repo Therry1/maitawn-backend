@@ -80,6 +80,7 @@ async def login(db, payload: LoginRequest) -> TokenResponse:
     refresh_token = create_refresh_token(user_id)
 
     return TokenResponse(
+        message="connexion reussie",
         access_token=access_token,
         refresh_token=refresh_token
     )

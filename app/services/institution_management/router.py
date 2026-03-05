@@ -82,12 +82,12 @@ async def get_institution_categories():
 )
 async def create(
     institution_data: InstitutionCreate,
-    user_connected_id: str = Depends(get_current_user)
+    user_id: str = Depends(get_current_user)
 ):
     """
     Créer une nouveau nouvelle institution
     """
-    return await create_institution_management(institution_data ,  db, user_connected_id)
+    return await create_institution_management(institution_data ,  db, user_id)
 
 @router.get(
     "/institutions",

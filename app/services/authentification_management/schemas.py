@@ -6,6 +6,7 @@ from datetime import datetime
 from typing import Optional
 from uuid import UUID
 from pydantic import BaseModel, Field
+from fastapi import status
 
 class LoginRequest(BaseModel):
     access_login: str
@@ -18,6 +19,7 @@ class UserCreateRequest(BaseModel):
     name: str = "Inonnu"
 
 class TokenResponse(BaseModel):
+    status_code : Optional[int] = status.HTTP_200_OK
     message : Optional[str] = None
     access_token: str
     refresh_token: str
