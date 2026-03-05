@@ -182,8 +182,8 @@ async def make_post_alert (db , payload , attachment):
     )
     
     # envois de la notification
-    if min_location.get("email"):
-        await send_notification(min_location.get("email"))
+    #if min_location.get("email"):
+    await send_notification(min_location.get("email"))
         
     return payload
     # except Exception as exception:
