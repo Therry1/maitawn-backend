@@ -4,10 +4,11 @@ Routes pour le service Post Alert Management
 
 from typing import Annotated, List
 from uuid import UUID
-from fastapi import APIRouter, Depends, status, Query
+from fastapi import APIRouter, Depends, HTTPException, status, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.config.database import get_db
+from app.services.email_service import send_email
 from app.services.post_alert_management.constants import ValidationState
 from firebase import get_firebase_db
 from app.services.post_alert_management.schemas import (
@@ -82,3 +83,4 @@ async def list_post_path(
     state: ValidationState = Query(None)
 ):
     return await list_post(db , institution_id , category_id , state)
+

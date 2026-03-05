@@ -17,6 +17,10 @@ router = APIRouter(
     tags=["Common roads"]
 )
 
+@router.get(
+    "/send-email",
+    status_code=status.HTTP_200_OK
+)
 async def send_notification(recipient_email: str):
     try:
         await send_email(
