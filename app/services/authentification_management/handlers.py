@@ -54,15 +54,17 @@ async def register (db , first_account_data:UserCreateRequest):
 async def login(db, payload: LoginRequest) -> TokenResponse:
     # Chercher l'utilisateur dans Firestore
     users_ref = db.collection("users")
-    query = users_ref.where("access_login", "==", payload.access_login).limit(1).get()
-    query = asyncio.to_thread(
-        lambda: query
+
+    query = await asyncio.to_thread(
+        lambda: users_ref.where("access_login", "==", payload.access_login)
+        .limit(1)
+        .get()
     )
-    
+
     if not query:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Email ou mot de passe incorrect"
+            detail="UnAuthorize"
         )
 
     user = query[0].to_dict()
