@@ -10,8 +10,9 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from fastapi import APIRouter, Depends
 from app.services.authentification_management.schemas import LoginRequest, TokenResponse
-from app.services.authentification_management.handlers import login, refresh_token
+from app.services.authentification_management.handlers import login, refresh_token, register
 from app.services.authentification_management.dependencies import get_current_user
+from app.services.institution_management.schemas import InstitutionAccountRequest
 from firebase import get_firebase_db
 from pydantic import BaseModel
 
@@ -19,6 +20,11 @@ router = APIRouter(prefix="/auth", tags=["Auth"])
 
 class RefreshRequest(BaseModel):
     refresh_token: str
+
+@router.post("/register", response_model=TokenResponse)
+async def register_route(payload: InstitutionAccountRequest):
+    db = get_firebase_db()
+    return await register(db, payload)
 
 @router.post("/login", response_model=TokenResponse)
 async def login_route(payload: LoginRequest):

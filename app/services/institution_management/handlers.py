@@ -173,10 +173,24 @@ async def list_institution_categories(db):
 
 async def create_institution_management(
     payload: InstitutionCreate,
-    first_account_data: InstitutionAccountRequest,
-    db
+    db , 
+    user_connected_id
 ):
     try:
+        # on regarde si l'utilisateur connecté a déjà un compte
+        doc = await asyncio.to_thread(
+            lambda: db.collection('institution_account_users')
+            .document(str(user_connected_id))   # 🔥 IMPORTANT
+            .get()
+        )
+        
+        if doc.empty():
+            raise HTTPException(
+                status_code=500,
+                detail=f"l'utilisateur connecté avec l'id {user_connected_id} n'a pa de compte"
+            )
+        
+        payload.user_account_id = str(user_connected_id)
         # On garde l'objet original
         institution_dict = payload.model_dump()
 
@@ -195,35 +209,11 @@ async def create_institution_management(
             .document(institution_dict["id"])
             .set(institution_dict)
         )
-        
-        
 
-        # 3. Créer le compte
-        new_account = {
-            "access_login": first_account_data.access_login,
-            "password": hash_password(first_account_data.password),
-            "autor_name": first_account_data.autor_name,
-            "email": first_account_data.email,
-            "institution_id": institution_dict["id"],
-            "created_at": datetime.utcnow().isoformat()
+        return {
+            'status_code': 201,
+            'message' : 'Institution créé avec sucess'
         }
-        
-        account_id = str(uuid4())
-        _, doc_ref = await asyncio.to_thread(
-            lambda: db.collection("institution_accounts")
-            .document(account_id)
-            .set(new_account)
-        ) 
-
-        # 4. Retourner les tokens comme pour le login
-        access_token = create_access_token(doc_ref.id)
-        refresh_token = create_refresh_token(doc_ref.id)
-
-        return TokenResponse(
-            message = "Institution créé avec succès",
-            access_token=access_token,
-            refresh_token=refresh_token
-        )
 
     except Exception as e:
         raise HTTPException(

@@ -5,16 +5,52 @@ Contient la logique métier du service
 """
 
 import asyncio
+from datetime import datetime
 import hashlib
+from uuid import uuid4
 from fastapi import HTTPException, status
 from app.services.authentification_management.dependencies import create_access_token, create_refresh_token, verify_token
 from app.services.authentification_management.schemas import LoginRequest, TokenResponse
+from app.services.institution_management.schemas import InstitutionAccountRequest
 
 def hash_password(password: str) -> str:
     return hashlib.sha256(password.encode()).hexdigest()
 
 def verify_password(plain: str, hashed: str) -> bool:
     return hash_password(plain) == hashed
+
+async def register (db , first_account_data:InstitutionAccountRequest):
+    try:
+        # 3. Créer le compte
+        new_account = {
+            "access_login": first_account_data.access_login,
+            "password": hash_password(first_account_data.password),
+            "name": first_account_data.name,
+            "email": first_account_data.email,
+            "created_at": datetime.utcnow().isoformat()
+        }
+        
+        account_id = str(uuid4())
+        _, doc_ref = await asyncio.to_thread(
+            lambda: db.collection("institution_account_users")
+            .document(account_id)
+            .set(new_account)
+        ) 
+
+        # 4. Retourner les tokens comme pour le login
+        access_token = create_access_token(doc_ref.id)
+        refresh_token = create_refresh_token(doc_ref.id)
+        
+        return TokenResponse(
+            message = "compte créé avec succès",
+            access_token=access_token,
+            refresh_token=refresh_token
+        )
+    except Exception as exception:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Email ou mot de passe incorrect"
+        )
 
 async def login(db, payload: LoginRequest) -> TokenResponse:
     # Chercher l'utilisateur dans Firestore

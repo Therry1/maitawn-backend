@@ -79,3 +79,4 @@ uvloop==0.22.1
 vercel==0.5.1
 watchfiles==1.1.1
 websockets==16.0
+fastapi-mail =1.6.2

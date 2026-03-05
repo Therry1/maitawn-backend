@@ -5,6 +5,7 @@ from typing import List
 from uuid import UUID
 from fastapi import APIRouter, Depends, status, Query
 
+from app.services.authentification_management.dependencies import get_current_user
 from app.services.institution_management.schemas import (
     ArrondissementResponse,
     DepartmentResponse,
@@ -83,12 +84,12 @@ async def get_institution_categories():
 )
 async def create(
     institution_data: InstitutionCreate,
-    first_account_data : InstitutionAccountRequest
+    user_connected_id: str = Depends(get_current_user)
 ):
     """
     Créer une nouveau nouvelle institution
     """
-    return await create_institution_management(institution_data,first_account_data, db)
+    return await create_institution_management(institution_data ,  db, user_connected_id)
 
 @router.get(
     "/institutions",

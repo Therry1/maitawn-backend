@@ -61,6 +61,7 @@ class InstitutionBase(BaseModel):
 
 class InstitutionCreate(InstitutionBase):
     id: UUID = Field(default_factory=uuid4)
+    user_account_id : Optional[str] = None
     region_id : UUID
     department_id : UUID
     arrondissement_id : UUID
@@ -74,7 +75,7 @@ class InstitutionAccountRequest(BaseModel):
     access_login : str
     password : str
     email : str
-    autor_name: str = "Inonnu"
+    name: str = "Inonnu"
     institution_id: UUID
     
 
