@@ -91,7 +91,7 @@ async def make_post_alert (db , payload , attachment):
     # verifier si l'on dispose des institutions pour le traitement de la catégorie envoyé
     institution_category_docs = await asyncio.to_thread(
         lambda: list(
-            db.collection('post_alert_categories')
+            db.collection('institution_categories')
             .where(
                 filter=FieldFilter(
                     "category_id", "==", str(payload["post_category_id"])
