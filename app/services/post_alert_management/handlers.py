@@ -11,6 +11,7 @@ from fastapi.responses import JSONResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from fastapi import HTTPException, status
+from google.cloud.firestore import Query
 
 from google.cloud.firestore_v1.base_query import FieldFilter
 from app.common.PushNotificationClass import send_notification
@@ -222,6 +223,8 @@ async def list_post(
                 '==',
                 state
             )
+            
+        query = query.order_by("created_at", direction=Query.DESCENDING)
 
         post_list_result = await asyncio.to_thread(
             lambda: list(query.stream())
