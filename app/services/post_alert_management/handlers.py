@@ -94,7 +94,7 @@ async def make_post_alert (db , payload , attachment):
             db.collection('institution_categories')
             .where(
                 filter=FieldFilter(
-                    "category_id", "==", str(payload["post_category_id"])
+                    "id", "==", "0229cb29-e91b-4d9c-b8e3-6307ac077579"
                 )
             )
             .stream()
@@ -112,7 +112,8 @@ async def make_post_alert (db , payload , attachment):
         lambda: list(
             db.collection('institutions').where(
                 filter=FieldFilter(
-                    "category_id", "==", str(payload["post_category_id"])
+                    #"category_id", "==", str(payload["post_category_id"])
+                    "category_id", "==", "0229cb29-e91b-4d9c-b8e3-6307ac077579"
                 )
             ).stream()
         )
