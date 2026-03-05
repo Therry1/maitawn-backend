@@ -72,12 +72,12 @@ class PushNotificationClass():
             )
             
 
-async def send_notification(recipient_email: str):
+async def send_notification(recipient_email: str ,  description:str = None):
     try:
         await send_email(
             recipients=[recipient_email],
-            subject="Nouvelle alerte",
-            body="<h1>Bonjour</h1><p>Vous avez une nouvelle alerte.</p>"
+            subject="Vous avez recu une nouvelle alerte",
+            body="<h1>Desciption: </h1><p>"+description+"</p>"
         )
         print("message:Email envoyé avec succès")
     except Exception as e:

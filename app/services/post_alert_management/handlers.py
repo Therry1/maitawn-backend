@@ -184,14 +184,12 @@ async def make_post_alert (db , payload , attachment):
     # envois de la notification
     if min_location.get("user_account_id"):
         user_account_doc = await asyncio.to_thread(
-            lambda: list(
-                db.collection('users').where(
+            lambda: db.collection('users').where(
                     filter=FieldFilter(
                         #"category_id", "==", str(payload["post_category_id"])
                         "id", "==", min_location.get("user_account_id")
                     )
                 ).stream()
-            )
         )
         user = user_account_doc.to_dict()
         await send_notification(user["email"])
