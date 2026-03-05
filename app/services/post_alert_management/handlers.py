@@ -182,16 +182,17 @@ async def make_post_alert (db , payload , attachment):
     )
     
     # envois de la notification
-    if min_location.get("user_account_id"):
-        user_account_doc = await asyncio.to_thread(
-            lambda: db.collection('users').where(
-                    filter=FieldFilter(
-                        #"category_id", "==", str(payload["post_category_id"])
-                        "id", "==", min_location.get("user_account_id")
-                    )
-                ).stream()
+    user_account_docs = await asyncio.to_thread(
+        lambda: list(
+            db.collection('users').where(
+                filter=FieldFilter("id", "==", min_location.get("user_account_id"))
+            ).stream()
         )
-        user = user_account_doc.to_dict()
+    )
+
+    if user_account_docs:  # Vérifie qu'on a au moins un résultat
+        user_doc = user_account_docs[0]  # Prendre le premier document
+        user = user_doc.to_dict()         # Convertir en dictionnaire
         await send_notification(user["email"])
         
     return payload
