@@ -8,7 +8,7 @@ from app.services.institution_management import router as institution_management
 from app.services.authentification_management import router as auth_management_router
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.common import common_router as common_router
+from app.common import common_router as my_common_router
 
 logger = logging.getLogger(__name__)
 app = FastAPI()
@@ -21,7 +21,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(common_router.router)
+app.include_router(my_common_router.router)
 app.include_router(auth_management_router.router)
 app.include_router(post_alert_management_router.router)
 app.include_router(institution_management_router.router)
