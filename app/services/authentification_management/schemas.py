@@ -11,6 +11,12 @@ class LoginRequest(BaseModel):
     access_login: str
     password: str
 
+class UserCreateRequest(BaseModel):
+    access_login : str
+    password : str
+    email : str
+    name: str = "Inonnu"
+
 class TokenResponse(BaseModel):
     message : Optional[str] = None
     access_token: str

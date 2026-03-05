@@ -179,7 +179,7 @@ async def create_institution_management(
     try:
         # on regarde si l'utilisateur connecté a déjà un compte
         doc = await asyncio.to_thread(
-            lambda: db.collection('institution_account_users')
+            lambda: db.collection('users')
             .document(str(user_connected_id))   # 🔥 IMPORTANT
             .get()
         )

@@ -9,11 +9,9 @@ from app.services.authentification_management.dependencies import get_current_us
 from app.services.institution_management.schemas import (
     ArrondissementResponse,
     DepartmentResponse,
-    InstitutionAccountRequest,
     InstitutionCategoryResponse,
     InstitutionCreate,
     InstitutionResponse,
-    InstitutionUpdate,
     RegionResponse
 )
 from app.services.institution_management.handlers import (

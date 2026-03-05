@@ -76,7 +76,6 @@ class InstitutionAccountRequest(BaseModel):
     password : str
     email : str
     name: str = "Inonnu"
-    institution_id: UUID
     
 
 class InstitutionUpdate(BaseModel):

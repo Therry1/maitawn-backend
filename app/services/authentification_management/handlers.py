@@ -10,8 +10,7 @@ import hashlib
 from uuid import uuid4
 from fastapi import HTTPException, status
 from app.services.authentification_management.dependencies import create_access_token, create_refresh_token, verify_token
-from app.services.authentification_management.schemas import LoginRequest, TokenResponse
-from app.services.institution_management.schemas import InstitutionAccountRequest
+from app.services.authentification_management.schemas import LoginRequest, TokenResponse, UserCreateRequest
 
 def hash_password(password: str) -> str:
     return hashlib.sha256(password.encode()).hexdigest()
@@ -19,7 +18,7 @@ def hash_password(password: str) -> str:
 def verify_password(plain: str, hashed: str) -> bool:
     return hash_password(plain) == hashed
 
-async def register (db , first_account_data:InstitutionAccountRequest):
+async def register (db , first_account_data:UserCreateRequest):
     try:
         # 3. Créer le compte
         new_account = {
@@ -32,7 +31,7 @@ async def register (db , first_account_data:InstitutionAccountRequest):
         
         account_id = str(uuid4())
         _, doc_ref = await asyncio.to_thread(
-            lambda: db.collection("institution_account_users")
+            lambda: db.collection("users")
             .document(account_id)
             .set(new_account)
         ) 
@@ -54,7 +53,7 @@ async def register (db , first_account_data:InstitutionAccountRequest):
 
 async def login(db, payload: LoginRequest) -> TokenResponse:
     # Chercher l'utilisateur dans Firestore
-    users_ref = db.collection("institution_account_users")
+    users_ref = db.collection("users")
     query = users_ref.where("access_login", "==", payload.access_login).limit(1).get()
     query = asyncio.to_thread(
         lambda: query
