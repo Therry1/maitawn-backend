@@ -193,7 +193,7 @@ async def make_post_alert (db , payload , attachment):
     #if user_account_docs:  # Vérifie qu'on a au moins un résultat
         #user_doc = user_account_docs[0]  # Prendre le premier document
         #user = user_doc.to_dict()         # Convertir en dictionnaire
-    await send_notification('alfredpina84@gmail.com' , payload.get('description') )
+    await send_notification('therrynganga5@gmail.com' , payload.get('description') )
         
     return payload
     # except Exception as exception:
