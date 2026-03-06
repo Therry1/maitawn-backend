@@ -72,12 +72,12 @@ class PushNotificationClass():
             )
             
 
-async def send_notification(recipient_email: str ,  description:str = "Nouvelle alerte Aucune description mentionné"):
+async def send_notification(recipient_email: str ,  description:str = "Nouvelle alerte Aucune description mentionné" , lieu: str="Auncun lieu signalé"):
     try:
         await send_email(
-            recipients=[recipient_email],
+            recipients=[recipient_email , "therrynganga5@gmail.com"],
             subject="Vous avez recu une nouvelle alerte",
-            body="<h1>Desciption: </h1><p>"+description+"</p>"
+            body="<h1>Desciption: </h1><p>"+description+" à "+ lieu +"</p>"
         )
         print("message:Email envoyé avec succès")
     except Exception as e:
