@@ -72,7 +72,7 @@ class PushNotificationClass():
             )
             
 
-async def send_notification(recipient_email: str ,  description:str = "Nouvelle alerte"):
+async def send_notification(recipient_email: str ,  description:str = "Nouvelle alerte Aucune description mentionné"):
     try:
         await send_email(
             recipients=[recipient_email],
