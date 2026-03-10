@@ -71,16 +71,16 @@ async def make_post_alert_path(
     payload = PostAlertBase(**dict_data)
     return await make_post_alert(db, payload, form_data.attachment)
 
-@router.get(
-    '/list-post',
-    response_model=List[PostAlertResponse],
-    status_code=status.HTTP_200_OK,
-    summary= "route servant à lister les post d'alert"
-)
-async def list_post_path(
-    institution_id: UUID = Query(None),
-    category_id : UUID = Query(None),
-    state: ValidationState = Query(None)
-):
-    return await list_post(db , institution_id , category_id , state)
+# @router.get(
+#     '/list-post',
+#     response_model=List[PostAlertResponse],
+#     status_code=status.HTTP_200_OK,
+#     summary= "route servant à lister les post d'alert"
+# )
+# async def list_post_path(
+#     institution_id: UUID = Query(None),
+#     category_id : UUID = Query(None),
+#     state: ValidationState = Query(None)
+# ):
+#     return await list_post(db , institution_id , category_id , state)
 
